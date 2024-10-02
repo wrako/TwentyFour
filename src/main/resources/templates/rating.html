@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Add viewport meta tag for responsiveness -->
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="f-igri-ru-by-html-to">
+    <div class="background-shadow">
+        <div class="list">
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/login'" >Sign in</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/reg'">Sign up</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/start'">Play</button>
+
+        </div>
+        <div class="link-f-logoimage-png"></div>
+    </div>
+
+
+    <div class="data">
+        <form id="ratingForm" action="/rate-game" method="post" class="custom-form">
+            <!-- Форма для оценки игры -->
+            <div class="form-group">
+                <label for="valueRat">Rate the game (1-5 stars):</label>
+                <select id="valueRat" name="valueRat" class="form-control">
+                    <option value="1">1 star</option>
+                    <option value="2">2 stars</option>
+                    <option value="3">3 stars</option>
+                    <option value="4">4 stars</option>
+                    <option value="5">5 stars</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit Rating</button>
+
+
+            <div id="ratingContainer" class="aveRating"></div>
+
+        </form>
+
+
+    </div>
+
+    <div class="overlay">
+        <div class="overlap-2">
+            <p class="f-igri-ru">
+                <button class="text-wrapper-56" onclick="window.location.href='/comments'">Comments</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/rating'">Rating</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/score'">Top Scores</button>
+                <span class="span">&nbsp;</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript для отправки оценки игры -->
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Получение контейнера для комментариев
+        var ratingContainer = document.getElementById("ratingContainer");
+
+        // Отправка запроса на получение комментариев при загрузке страницы
+        fetch("/get/rating")
+            .then(response => response.json())
+            .then(data => displayRating(data))
+            .catch(error => console.error('Error:', error));
+
+        // Функция для отображения комментариев на странице
+        function displayRating(rating) {
+            // Проход по каждому комментарию и добавление его на страницу
+            var ratingElement = document.createElement("div");
+            ratingElement.innerText = "Average Rating: " + rating;
+            ratingContainer.appendChild(ratingElement);
+        }
+    });
+
+
+
+</script>
+</body>
+</html>

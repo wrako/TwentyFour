@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Add viewport meta tag for responsiveness -->
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="f-igri-ru-by-html-to">
+    <div class="background-shadow">
+        <div class="list">
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/login'" >Sign in</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/reg'">Sign up</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/start'">Play</button>
+
+        </div>
+        <div class="link-f-logoimage-png"></div>
+    </div>
+
+    <div class="data">
+        <form id="registrationForm" action="/api/account/register" method="post" class="custom-form">
+            <h1>Registration</h1>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" class="form-control" name="username"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" name="password"/>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+        </form>
+    </div>
+
+    <div class="overlay">
+        <div class="overlap-2">
+            <p class="f-igri-ru">
+                <button class="text-wrapper-56" onclick="window.location.href='/comments'">Comments</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/rating'">Rating</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/score'">Top Scores</button>
+                <span class="span">&nbsp;</span>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

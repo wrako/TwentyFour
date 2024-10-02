@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 Game</title>
+    <style>
+        /* Стили для игрового поля */
+        .row {
+            display: flex;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            margin: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+        .game-won-message {
+            margin-top: 20px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var gameBoard = document.getElementById("game-board");
+        var gameWonMessage = document.getElementById("game-won");
+
+        fetch("/initial-state")
+            .then(response => response.json())
+            .then(data => displayBoard(data))
+            .catch(error => console.error('Error:', error));
+
+        function displayBoard(boardData) {
+            gameBoard.innerHTML = ""; // Очищаем игровое поле перед отображением нового состояния
+
+            // Проверяем, что boardData является массивом
+            if (!Array.isArray(boardData)) {
+                console.error('Error: Board data is not an array');
+                return;
+            }
+
+            // Проходимся по каждой строке в данных игрового поля
+            boardData.forEach(row => {
+                var rowDiv = document.createElement("div");
+                rowDiv.classList.add("row");
+
+                // Проходимся по каждой ячейке в строке
+                row.forEach(cellValue => {
+                    var cellDiv = document.createElement("div");
+                    cellDiv.classList.add("cell");
+                    // Если значение ячейки не равно 0, добавляем его как текст в ячейку
+                    if (cellValue !== 0) {
+                        cellDiv.textContent = cellValue;
+                    }
+                    rowDiv.appendChild(cellDiv);
+                });
+
+                gameBoard.appendChild(rowDiv);
+            });
+        }
+
+        // Обработка нажатий клавиш
+        document.addEventListener("keydown", function(event) {
+            var direction;
+            switch (event.key) {
+                case "ArrowUp":
+                    direction = "up";
+                    break;
+                case "ArrowDown":
+                    direction = "down";
+                    break;
+                case "ArrowLeft":
+                    direction = "left";
+                    break;
+                case "ArrowRight":
+                    direction = "right";
+                    break;
+                default:
+                    return; // Выход из обработчика для других клавиш
+            }
+            event.preventDefault(); // Предотвращаем прокрутку страницы при нажатии стрелок
+            makeMove(direction);
+        });
+
+        function makeMove(direction) {
+            // Отправляем запрос на сервер с направлением движения
+            fetch("/move?direction=" + direction)
+                .then(response => response.json())
+                .then(data => {
+                    displayBoard(data);
+                    checkGameWon(); // Проверяем, выиграна ли игра после каждого хода
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Проверка, выиграна ли игра
+        function checkGameWon() {
+            fetch("/is-won")
+                .then(response => response.json())
+                .then(isWon => {
+                    if (isWon) {
+                        gameWonMessage.style.display = "block";
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+</script>
+</body>
+</html>

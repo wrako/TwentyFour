@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Add viewport meta tag for responsiveness -->
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="f-igri-ru-by-html-to">
+    <div class="background-shadow">
+        <div class="list">
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/login'" >Sign in</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/reg'">Sign up</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/start'">Play</button>
+        </div>
+        <div class="link-f-logoimage-png"></div>
+    </div>
+    <h1>2048 Game</h1>
+
+
+    <div class="data">
+
+        <div id="player-score" class="player-score"></div> <!-- Этот div будет содержать счет -->
+
+        <div id="game-board" class="game-container">
+            <!-- Game board will be displayed here -->
+        </div>
+
+        <div class="reset-button">
+            <button onclick="resetGame()">Reset Game</button>
+        </div>
+
+        <div class="cheat-button">
+            <button onclick="removeTile()">Cheat</button>
+        </div>
+
+        <div id="game-won" class="game-over-message" style="display: none;">
+            Congratulations! You've won the game!
+        </div>
+
+        <div id="game-lose" class="game-over-message" style="display: none;">
+            Sorry! You've lost the game!
+        </div>
+
+    </div>
+
+    <div class="overlay">
+        <div class="overlap-2">
+            <p class="f-igri-ru">
+                <button class="text-wrapper-56" onclick="window.location.href='/comments'">Comments</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/rating'">Rating</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/score'">Top Scores</button>
+                <span class="span">&nbsp;</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var gameBoard = document.getElementById("game-board");
+        var gameWonMessage = document.getElementById("game-won");
+        var gameLoseMessage = document.getElementById("game-lose");
+        var playerScore = document.getElementById("player-score"); // Получаем элемент счета игрока
+
+        // Function to render the game board
+        function renderBoard(boardData) {
+            gameBoard.innerHTML = ""; // Clear the game board before rendering
+            // Loop through each row in the game board data
+            printScore();
+            boardData.forEach(row => {
+                var rowDiv = document.createElement("div");
+                rowDiv.classList.add("row");
+
+                // Loop through each cell in the row
+                row.forEach(cellValue => {
+                    var cellDiv = document.createElement("div");
+                    cellDiv.classList.add("cell");
+                    cellDiv.style.backgroundColor = getTileColor(cellValue);
+                    // If the cell value is not 0, add it as text to the cell
+                    if (cellValue !== 0) {
+                        cellDiv.textContent = cellValue;
+                    }
+                    rowDiv.appendChild(cellDiv);
+                });
+
+                gameBoard.appendChild(rowDiv);
+
+            });
+        }
+
+        // Handle key presses
+        document.addEventListener("keydown", function(event) {
+            var direction;
+            switch (event.code) {
+                case "ArrowUp":
+                    direction = "up";
+                    break;
+                case "ArrowDown":
+                    direction = "down";
+                    break;
+                case "ArrowLeft":
+                    direction = "left";
+                    break;
+                case "ArrowRight":
+                    direction = "right";
+                    break;
+                case "KeyZ":
+                    direction = "none";
+                    removeTile();
+                    break;
+                default:
+                    return; // Exit the handler for other keys
+            }
+            event.preventDefault(); // Prevent page scrolling when arrow keys are pressed
+            if(direction.localeCompare("none") != 0) {
+                makeMove(direction);
+            }
+        });
+
+        // Function to make a move
+        function makeMove(direction) {
+            // Send a request to the server with the movement direction
+            fetch("/move?direction=" + direction)
+                .then(response => response.json())
+                .then(data => {
+                    printScore();
+                    renderBoard(data);
+                    checkGameWon(); // Check if the game is won after each move
+                })
+                .catch(error => console.error('Error:', error));
+            fetch("/save-score")
+        }
+
+        // Function to get tile color based on value
+        function getTileColor(value) {
+            switch (value) {
+                case 2: return "#eee4da";
+                case 4: return "#ede0c8";
+                case 8: return "#f2b179";
+                case 16: return "#f59563";
+                case 32: return "#f67c5f";
+                case 64: return "#f65e3b";
+                case 128: return "#edcf72";
+                case 256: return "#edcc61";
+                case 512: return "#edc850";
+                case 1024: return "#edc53f";
+                case 2048: return "#edc22e";
+                default: return "#ccc0b4";
+            }
+        }
+
+        // Function to check if the game is won
+        function checkGameWon() {
+            fetch("/is-over")
+                .then(response => response.json())
+                .then(isOver => {
+                    if (isOver) {
+                        fetch("/is-win")
+                            .then(response => response.json())
+                            .then(isWin => {
+                                if (isWin) {
+                                    gameWonMessage.style.display = "block";
+                                } else  gameLoseMessage.style.display = "block";
+
+                            })
+                            .catch(error => console.error('Error:', error));
+
+
+                        fetch("/save-score")
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function printScore(){
+            fetch("/save-score")
+            fetch("/get/score")
+                .then(response => response.json())
+                .then(data => {
+                    // Вставляем полученное значение счета в элемент playerScore
+                    playerScore.textContent = "Your Score: " + data;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+
+        function removeTile() {
+            fetch("/cheat")
+                .then(response => response.json())
+                .then(data => {
+                    printScore();
+                    renderBoard(data);
+                    checkGameWon(); // Check if the game is won after each move
+                })
+                .catch(error => console.error('Error:', error));
+            fetch("/save-score")
+        }
+
+
+        // Fetch initial game state when the DOM is loaded
+        fetch("/initial-state")
+            .then(response => response.json())
+            .then(data => renderBoard(data))
+            .catch(error => console.error('Error:', error));
+
+        // Получаем счет игрока при загрузке страницы
+
+    });
+
+    function resetGame() {
+        fetch("/save-score")
+        fetch("/reset")
+            .then(response => {
+                if (response.ok) {
+                    // Обработка успешного ответа, если необходимо
+                    console.log("Game reset successfully.");
+                    fetch("/initial-state")
+                        .then(response => response.json())
+                        .then(data => renderBoard(data))
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    // Обработка ошибки, если необходимо
+                    console.error("Failed to reset game.");
+                }
+            })
+            .catch(error => {
+                // Обработка ошибок при выполнении запроса
+                console.error('Error:', error);
+            });
+    }
+
+
+</script>
+
+</body>
+</html>

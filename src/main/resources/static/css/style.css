@@ -1,0 +1,235 @@
+/* Define base styles */
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('../assets/images/back.png');
+  color: #333;
+}
+
+/* Adjust logo */
+.link-f-logoimage-png {
+  width: 200px;
+  height: 60px;
+  background-image: url(../assets/images/link-f-logoimage-png.png);
+  background-size: cover;
+}
+
+.row {
+  display: flex;
+}
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.game-container {
+  display: grid;
+  grid-column-gap: 10px;
+  margin-bottom: 20px;
+}
+
+.error-login{
+  position: absolute; /* абсолютное позиционирование */
+  left: 41%; /* отступ слева */
+  top: 27%; /* выравнивание по вертикали */
+  display: none;
+  color: red;
+
+
+}
+.reset-button{
+  position: absolute; /* абсолютное позиционирование */
+  left: 70%; /* отступ слева */
+  top: 40%; /* выравнивание по вертикали */
+  transform: translateY(-50%); /* сдвиг на половину высоты */
+  padding: 10px; /* отступы внутри элемента */
+  background-color: #f0f0f0; /* цвет фона */
+  border: 1px solid #ccc; /* рамка */
+  border-radius: 5px; /* радиус скругления углов */
+  font-size: 16px; /* размер шрифта */
+
+
+
+}
+
+.cheat-button{
+  position: absolute; /* абсолютное позиционирование */
+  left: 70%; /* отступ слева */
+  top: 47%; /* выравнивание по вертикали */
+  transform: translateY(-50%); /* сдвиг на половину высоты */
+  padding: 10px; /* отступы внутри элемента */
+  background-color: #f0f0f0; /* цвет фона */
+  border: 1px solid #ccc; /* рамка */
+  border-radius: 5px; /* радиус скругления углов */
+  font-size: 16px; /* размер шрифта */
+
+
+
+}
+
+
+.aveRating {
+  position: absolute; /* абсолютное позиционирование */
+  left: 46%; /* отступ слева */
+  top: 60%; /* выравнивание по вертикали */
+  transform: translateY(-50%); /* сдвиг на половину высоты */
+  padding: 10px; /* отступы внутри элемента */
+  background-color: #f0f0f0; /* цвет фона */
+  border: 1px solid #ccc; /* рамка */
+  border-radius: 5px; /* радиус скругления углов */
+  font-size: 16px; /* размер шрифта */
+
+
+}
+
+
+.player-score {
+  position: absolute; /* абсолютное позиционирование */
+  left: 25%; /* отступ слева */
+  top: 50%; /* выравнивание по вертикали */
+  transform: translateY(-50%); /* сдвиг на половину высоты */
+  padding: 10px; /* отступы внутри элемента */
+  background-color: #f0f0f0; /* цвет фона */
+  border: 1px solid #ccc; /* рамка */
+  border-radius: 5px; /* радиус скругления углов */
+  font-size: 16px; /* размер шрифта */
+}
+.game-over-message {
+  position: absolute; /* абсолютное позиционирование */
+  left: 65%; /* отступ слева */
+  top: 60%; /* выравнивание по вертикали */
+  transform: translateY(-50%); /* сдвиг на половину высоты */
+  padding: 10px; /* отступы внутри элемента */
+  background-color: #f0f0f0; /* цвет фона */
+  border: 1px solid #ccc; /* рамка */
+  border-radius: 5px; /* радиус скругления углов */
+  font-size: 16px; /* размер шрифта */
+}
+
+/* Adjust container */
+.f-igri-ru-by-html-to {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Adjust header */
+.background-shadow {
+  width: 100%;
+  height: 64px;
+  background-color: #262b2e;
+  box-shadow: 0px 1px 4px #000000b2;
+}
+
+/* Adjust navigation */
+.list {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.item-link {
+  margin: 0 10px;
+}
+
+/* Adjust form */
+.data {
+  width: 70%; /* Adjust width to be 90% of the viewport width */
+  background-color: #f9f9f9;
+  margin-top: 60px; /* Increased margin from top */
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 600px; /* Минимальная высота контейнера */
+  height: auto; /* Автоматическое расширение по вертикали */
+
+}
+
+/* Adjust footer */
+.overlay {
+  width: 70%; /* Match width with .data */
+  background-color: #262b2ecc;
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 0 0 10px 10px;
+}
+
+.f-igri-ru {
+  color: #fce1cd;
+  font-size: 16px;
+}
+
+.text-wrapper-56 {
+  text-decoration: underline;
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+
+.pegi-png {
+  width: 32px;
+  height: 32px;
+  background-image: url(../assets/images/pegi-12-png.png);
+  background-size: cover;
+}
+
+
+/*////////////////////////// LOGIN AND REGISTER BUTTONS /////////////////////////////////////*/
+.f-igri-ru-by-html-to .item-link {
+  position: absolute;
+  width: auto; /* Ширина кнопки будет автоматически адаптироваться к размеру текста */
+  height: 20px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 400;
+  color: #fa8430;
+  padding: 0 10px; /* Добавлено отступы по горизонтали */
+  font-size: 14px;
+  text-align: right;
+  letter-spacing: 0;
+  line-height: 16px;
+  white-space: nowrap;
+  border-radius: 5px; /* Добавлен скругленный угол */
+}
+
+
+.item-link:nth-child(1) {
+  top: 20px;
+  left: 190px; /* Вторая кнопка, увеличенный отступ */
+}
+
+.item-link:nth-child(2) {
+  top: 20px;
+  left: 270px; /* Третья кнопка, увеличенный отступ */
+}
+
+.item-link:nth-child(3) {
+  top: 20px;
+  left: 350px; /* Третья кнопка, увеличенный отступ */
+}
+
+.btn-orange {
+  background-color: orange;
+  border-color: orange;
+  color: white;
+}
+
+.btn-orange:hover {
+  background-color: darkorange;
+  border-color: darkorange;
+  color: white;
+}
+/*////////////////////////////////////////////////////////////////////////*/
+
+
+

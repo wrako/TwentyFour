@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Add viewport meta tag for responsiveness -->
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="f-igri-ru-by-html-to">
+    <div class="background-shadow">
+        <div class="list">
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/login'" >Sign in</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/reg'">Sign up</button>
+            <button class="item-link btn btn-orange btn-sm" onclick="window.location.href='/start'">Play</button>
+        </div>
+        <div class="link-f-logoimage-png"></div>
+    </div>
+
+
+    <div class="data">
+        <form id="commentForm" action="/add-comment" method="post" class="custom-form">
+            <div class="form-group">
+                <label for="commentText">Comment</label>
+                <input type="text" id="commentText" class="form-control" name="commentText"/>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Add Comment</button>
+
+            <!-- Контейнер для вывода комментариев -->
+            <div id="commentsContainer"></div>
+        </form>
+    </div>
+
+    <div class="overlay">
+        <div class="overlap-2">
+            <p class="f-igri-ru">
+                <button class="text-wrapper-56" onclick="window.location.href='/comments'">Comments</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/rating'">Rating</button>
+                <span class="span"> | </span>
+                <button class="text-wrapper-56" onclick="window.location.href='/score'">Top Scores</button>
+                <span class="span">&nbsp;</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript для получения и отображения комментариев -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Получение контейнера для комментариев
+        var commentsContainer = document.getElementById("commentsContainer");
+
+        // Отправка запроса на получение комментариев при загрузке страницы
+        fetch("/get/comment")
+            .then(response => response.json())
+            .then(data => displayComments(data))
+            .catch(error => console.error('Error:', error));
+
+        // Функция для отображения комментариев на странице
+        function displayComments(comments) {
+            // Проход по каждому комментарию и добавление его на страницу
+            comments.forEach(function(comment) {
+                var commentElement = document.createElement("div");
+                commentElement.textContent = comment.comment; // Предполагается, что текст комментария доступен через свойство "comment"
+                commentsContainer.appendChild(commentElement);
+            });
+        }
+    });
+</script>
+</body>
+</html>

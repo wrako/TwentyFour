@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1024 Game</title>
+    <style>
+        /* CSS для стилизации игрового поля */
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            grid-gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tile {
+            width: 100px;
+            height: 100px;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Дополнительные стили по вашему усмотрению */
+    </style>
+</head>
+<body>
+<div id="game-container" class="game-container"></div>
+<button onclick="startGame()">Start Game</button>
+
+<script>
+    // JavaScript для логики игры
+    var board = [];
+    var size = 4; // размер поля
+    var score = 0;
+
+    // Создание игрового поля
+    function createBoard() {
+        var gameContainer = document.getElementById("game-container");
+        gameContainer.innerHTML = ""; // очистка игрового поля
+
+        for (var i = 0; i < size; i++) {
+            var row = [];
+            for (var j = 0; j < size; j++) {
+                var tile = document.createElement("div");
+                tile.className = "tile";
+                tile.id = "tile-" + i + "-" + j;
+                tile.innerText = "";
+                gameContainer.appendChild(tile);
+                row.push(0);
+            }
+            board.push(row);
+        }
+    }
+
+    // Добавление нового тайла
+    function addTile() {
+        var emptyTiles = [];
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                if (board[i][j] === 0) {
+                    emptyTiles.push({ row: i, col: j });
+                }
+            }
+        }
+        if (emptyTiles.length > 0) {
+            var randomIndex = Math.floor(Math.random() * emptyTiles.length);
+            var position = emptyTiles[randomIndex];
+            var newValue = Math.random() < 0.9 ? 2 : 4; // 90% вероятности для 2 и 10% для 4
+            board[position.row][position.col] = newValue;
+            updateBoard();
+        }
+    }
+
+    // Обновление игрового поля с учетом новых значений
+    function updateBoard() {
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                var tile = document.getElementById("tile-" + i + "-" + j);
+                tile.innerText = board[i][j] === 0 ? "" : board[i][j];
+                tile.style.backgroundColor = getTileColor(board[i][j]);
+            }
+        }
+    }
+
+    // Получение цвета для тайла в зависимости от его значения
+    function getTileColor(value) {
+        switch (value) {
+            case 2: return "#eee4da";
+            case 4: return "#ede0c8";
+            case 8: return "#f2b179";
+            case 16: return "#f59563";
+            case 32: return "#f67c5f";
+            case 64: return "#f65e3b";
+            case 128: return "#edcf72";
+            case 256: return "#edcc61";
+            case 512: return "#edc850";
+            case 1024: return "#edc53f";
+            case 2048: return "#edc22e";
+            default: return "#ccc0b4";
+        }
+    }
+
+    // Начало новой игры
+    function startGame() {
+        board = [];
+        score = 0;
+        createBoard();
+        addTile();
+        addTile();
+
+        // Добавление обработчиков клавиш
+        document.addEventListener("keydown", handleKeyPress);
+    }
+
+    // Обработчик нажатия клавиш
+    function handleKeyPress(event) {
+        switch (event.key) {
+            case "ArrowUp":
+                moveTiles("up");
+                break;
+            case "ArrowDown":
+                moveTiles("down");
+                break;
+            case "ArrowLeft":
+                moveTiles("left");
+                break;
+            case "ArrowRight":
+                moveTiles("right");
+                break;
+        }
+    }
+
+    // Логика перемещения тайлов
+    function moveTiles(direction) {
+        var moved = false; // флаг, указывающий, было ли какое-либо движение
+        switch (direction) {
+            case "up":
+                for (var j = 0; j < size; j++) {
+                    for (var i = 1; i < size; i++) {
+                        if (board[i][j] !== 0) {
+                            var row = i;
+                            while (row > 0 && board[row - 1][j] === 0) {
+                                board[row - 1][j] = board[row][j];
+                                board[row][j] = 0;
+                                row--;
+                                moved = true;
+                            }
+                            if (row > 0 && board[row - 1][j] === board[row][j]) {
+                                board[row - 1][j] *= 2;
+                                score += board[row - 1][j];
+                                board[row][j] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+            case "down":
+                for (var j = 0; j < size; j++) {
+                    for (var i = size - 2; i >= 0; i--) {
+                        if (board[i][j] !== 0) {
+                            var row = i;
+                            while (row < size - 1 && board[row + 1][j] === 0) {
+                                board[row + 1][j] = board[row][j];
+                                board[row][j] = 0;
+                                row++;
+                                moved = true;
+                            }
+                            if (row < size - 1 && board[row + 1][j] === board[row][j]) {
+                                board[row + 1][j] *= 2;
+                                score += board[row + 1][j];
+                                board[row][j] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+            case "left":
+                for (var i = 0; i < size; i++) {
+                    for (var j = 1; j < size; j++) {
+                        if (board[i][j] !== 0) {
+                            var col = j;
+                            while (col > 0 && board[i][col - 1] === 0) {
+                                board[i][col - 1] = board[i][col];
+                                board[i][col] = 0;
+                                col--;
+                                moved = true;
+                            }
+                            if (col > 0 && board[i][col - 1] === board[i][col]) {
+                                board[i][col - 1] *= 2;
+                                score += board[i][col - 1];
+                                board[i][col] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+            case "right":
+                for (var i = 0; i < size; i++) {
+                    for (var j = size - 2; j >= 0; j--) {
+                        if (board[i][j] !== 0) {
+                            var col = j;
+                            while (col < size - 1 && board[i][col + 1] === 0) {
+                                board[i][col + 1] = board[i][col];
+                                board[i][col] = 0;
+                                col++;
+                                moved = true;
+                            }
+                            if (col < size - 1 && board[i][col + 1] === board[i][col]) {
+                                board[i][col + 1] *= 2;
+                                score += board[i][col + 1];
+                                board[i][col] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+
+        if (moved) {
+            addTile();
+            updateBoard();
+            // Обновите отображение счета, если это необходимо
+            // Например: document.getElementById("score").innerText = score;
+        }
+    }
+
+
+    // Инициализация игры при загрузке страницы
+    window.onload = startGame;
+</script>
+</body>
+</html>
